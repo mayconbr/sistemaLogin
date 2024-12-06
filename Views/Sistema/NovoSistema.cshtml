@@ -1,0 +1,73 @@
+﻿
+<div class="form-style">
+    <h3 class="titulo-pagina">Cadastro de Sistemas</h3>
+    <div class="linha-horizontal"></div>
+    <form onsubmit="doInsertSystem(this); return false;">
+        <fieldset class="fildsetCadastro">
+            <div class="object-input">
+                <div>
+                    <label>Nome</label>
+                </div>
+                <div>
+                    <input type="text"
+                           name="Name"
+                           id="Name"
+                           placeholder="Ex.: Digite o nome do novo sistema"
+                           required />
+                </div>
+            </div>
+
+            <div class="object-input">
+                <div>
+                    <label>Dominio</label>
+                </div>
+                <div>
+                    <input type="url"
+                           name="Domain"
+                           id="Email"
+                           placeholder="Ex.: wwwgpaudax.com.br"
+                           required />
+                </div>
+            </div>            
+        </fieldset>
+
+        <div class="btn-cad">
+            <button class="btn-cadastrar" type="submit">Cadastrar</button>
+        </div>
+
+    </form>
+</div>
+
+<div class="modal-message" id="modalMessage">
+    <div class="modal-message-content">
+        <div class="modal-message-header" id="divMessage">
+        </div>
+        <div class="modal-conteudo">
+            <button class="botao-message" onclick="window.location.href='/Sistema/GerenciadorSistema';">Continuar</button>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function doInsertSystem(form) {
+            try {
+                var u = parseForm(form);
+                $.ajax({
+                    type: 'POST',
+                    url: '/InsertSystem',
+                    data: JSON.stringify(u),
+                    success: function (data) {
+                        openModalMessage("Sistema Cadastrado!");
+                    },
+                    error: function () {
+                        openModalMessage("Não foi possível cadastrar o novo sistema!");
+                    },
+                    contentType: "application/json"
+                });
+            } catch (e) {
+                alert(e.message);
+            }
+        }
+    </script>
+}

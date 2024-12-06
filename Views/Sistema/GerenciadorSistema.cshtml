@@ -1,0 +1,117 @@
+﻿@model dynamic
+<div class="form-style">
+    <h3 class="titulo-pagina">Todos os sistemas</h3>
+    <div class="linha-horizontal"></div>
+
+    <div class="form-controle">
+        <div class="container-title">
+            <h4>Nome</h4>
+            <h4>Dominio</h4>
+            <h4></h4>
+            <h4></h4>
+            <h4></h4>
+        </div>
+        <div class="tables" id="tables">
+            <ul class="table-nome" id="table-nome">
+                @foreach (dynamic System in Model.Systems)
+                {
+                    <li style="line-height: 50px;">@System.Name</li>
+                }
+            </ul>
+            <ul class="table-cpf">
+                @foreach (dynamic System in Model.Systems)
+                {
+                    <li style="line-height: 50px; width:150%;">@System.Domain</li>
+                }
+            </ul>
+            <ul class="table-tipo">
+                @foreach (dynamic System in Model.Systems)
+                {
+                    <li style="color:aliceblue; line-height: 50px; cursor:pointer;">.</li>
+                }
+            </ul>
+            <ul class="table-situacao">
+                @foreach (dynamic System in Model.Systems)
+                {
+                    <li style="color:aliceblue; line-height: 50px; cursor:pointer;">.</li>
+                }
+            </ul>
+            <ul class="table-status">
+                @foreach (dynamic System in Model.Systems)
+                {
+                    <li style="line-height: 50px;">
+                        <button class="botao-table" onclick=" window.location.href='/Sistema/Tipos?id=@System.Id';">
+                            <lord-icon src="https://cdn.lordicon.com/fmjvulyw.json"
+                                       trigger="hover"
+                                       stroke="bold"
+                                       colors="primary:#fff,secondary:#BBBBBB,tertiary:#fff,quaternary:#fff,quinary:#fff,senary:#fff"
+                                       style="width:25px;height:25px">
+                            </lord-icon>
+                        </button>
+                        <button class="botao-table red" onclick="doDeleteSystem(@System.Id)">
+                            <lord-icon src="https://cdn.lordicon.com/skkahier.json"
+                                       trigger="hover"
+                                       style="width:25px;height:25px;"
+                                       colors="primary:#fff"
+                                       class="">
+                            </lord-icon>
+                        </button>
+
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal-message" id="modalMessage">
+    <div class="modal-message-content">
+        <div class="modal-message-header" id="divMessage">
+        </div>
+        <div class="modal-conteudo">           
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function doInsertSystem(form) {
+            try {
+                var u = parseForm(form);
+                $.ajax({
+                    type: 'POST',
+                    url: '/InsertType',
+                    data: JSON.stringify(u),
+                    success: function (data) {
+                        openModalMessage("Cadastro Realizado!");
+                    },
+                    error: function () {
+                        openModalMessage("Não foi possível realizar o cadastro!");
+                    },
+                    contentType: "application/json"
+                });
+            } catch (e) {
+                alert(e.message);
+            }
+        }
+
+        function doDeleteSystem(Id) {
+            try {
+                $.ajax({
+                    type: 'PUT',
+                    url: '/DeleteSystem/' + Id,
+                    success: function () {
+                        sucessAtv("Sistema Excluido!");
+                    },
+                    error: function () {
+                        ErrAtv("Não foi possível excluir!");
+                    },
+                    contentType: "application/json"
+                });
+            } catch (e) {
+                alert(e.message);
+            }
+        }
+    </script>
+}

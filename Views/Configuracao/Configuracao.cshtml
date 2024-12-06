@@ -1,0 +1,160 @@
+﻿@model dynamic
+<div class="form-style">
+    <button class="btn-new" onclick="OpenModalSub()"><ion-icon name="add-outline" class="icon-add"></ion-icon>Sub Categoria</button>
+    <button class="btn-new" style="margin-right:10px;" onclick="OpenModalCategory()"><ion-icon name="add-outline" class="icon-add"></ion-icon>Categoria</button>
+    <h3 class="titulo-pagina">Configuração de Categorias</h3>
+    <div class="linha-horizontal"></div>
+    <div class="flex" style="margin-top:10px;">
+        <h4 style="flex-grow: 1;">Categorias</h4>
+        <h4 style="flex-grow: 1; margin-left:20px;">Sub Categorias</h4>
+    </div>
+    <div class="flex">
+        <table class="table-subcategory">
+            <tr>
+                <th>ID</th>
+                <th>Categoria</th>
+            </tr>
+            @foreach (dynamic Category in Model.Categories)
+            {
+                <tr>
+                    <td>@Category.Id</td>
+                    <td>@Category.Nome</td>                   
+                </tr>
+            }
+
+        </table>
+        <table class="table-subcategory" style="margin-left:20px;">
+            <tr>
+                <th>ID</th>
+                <th>Categoria</th>
+                <th>Sub</th>
+            </tr>
+            @foreach (dynamic Sub in Model.SubCategories)
+            {
+                <tr>
+                    <td>@Sub.Id</td>
+                    <td>@Sub.Category.Nome</td>
+                    <td>@Sub.Nome</td>
+                </tr>
+            }
+        </table>
+    </div>
+    
+
+</div>
+
+<div class="modal-message" id="modalMessage">
+    <div class="modal-message-content">
+        <div class="modal-conteudo">
+            <ion-icon name="close-outline" class="botao-close-modal" onclick="closeModalMessage(true)"></ion-icon>
+            <div id="divMessage" style="display:none;"></div>
+            <div id="category" style="display:none;">
+                <h3 class="titulo-pagina">Adicionar Categoria</h3>
+                <div class="linha-horizontal"></div>
+
+                <form onsubmit="doInsertCategory(this); return false;">
+                    <div class="div-flex">
+                    <input type="text" id="Nome" name="Nome" style="width:96%;" class="input" placeholder="Ex: Regiões">                        
+                    <button class="button-add" type="submit"><ion-icon name="add-outline"></ion-icon></button>
+                    </div>
+                </form>
+            </div>
+            <div id="subcategory" style="display:none;">
+                <h3 class="titulo-pagina">Adicionar Sub Categoria</h3>
+                <div class="linha-horizontal"></div>
+                <form onsubmit="doInsertSubCategory(this); return false;">
+                    <div class="div-flex">
+                        <input type="text" id="Nome" name="Nome" style="width:50%;" class="input" placeholder="Ex: Subcategoria">
+                        <select class="input" title="Category" id="CategoryId" name="CategoryId" required style="margin-left:10px; height:39px; width:50%;">
+                        <option value="">Selecione uma Categoria</option>
+                        @foreach (dynamic Category in Model.Categories)
+                        {
+                            <option value="@Category.Id">@Category.Nome</option>
+                        }
+                    </select>
+                    <button class="button-add" type="submit"><ion-icon name="add-outline"></ion-icon></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="message" id="message"></div>
+
+@section Scripts {
+    <script>
+
+        function OpenModalCategory(){
+            openModalMessage();
+            var category = document.getElementById('category');
+            category.style.display = 'block';           
+        }
+
+        function OpenModalSub() {
+            openModalMessage();
+            var subcategory = document.getElementById('subcategory');
+            subcategory.style.display = 'block';
+        }
+
+
+        function doInsertCategory(form) {
+            try {
+                var u = parseForm(form);
+                $.ajax({
+                    type: 'POST',
+                    url: '/InsertCategory',
+                    data: JSON.stringify(u),
+                    success: function (data) {
+                        sucessAtv("Cadastro Realizado!");
+
+                        setTimeout(function () {
+                            closeModalMessage(true);
+                        }, 3000);
+
+                    },
+                    error: function () {
+                        ErrAtv("Não foi possível realizar o cadastro!");
+
+                        setTimeout(function () {
+                            closeModalMessage(true);
+                        }, 3000);
+                    },
+                    contentType: "application/json"
+                });
+            } catch (e) {
+                alert(e.message);
+            }
+        }
+
+        function doInsertSubCategory(form) {
+            try {
+                var u = parseForm(form);
+                $.ajax({
+                    type: 'POST',
+                    url: '/InsertSubCategory',
+                    data: JSON.stringify(u),
+                    success: function (data) {
+                        sucessAtv("Cadastro Realizado!");
+
+                        setTimeout(function () {
+                            closeModalMessage(true);
+                        }, 3000);
+
+                    },
+                    error: function () {
+                        ErrAtv("Não foi possível realizar o cadastro!");
+
+                        setTimeout(function () {
+                            closeModalMessage(true);
+                        }, 3000);
+                    },
+                    contentType: "application/json"
+                });
+            } catch (e) {
+                alert(e.message);
+            }
+        }
+        
+    </script>
+}

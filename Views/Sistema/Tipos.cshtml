@@ -1,0 +1,137 @@
+﻿@model dynamic
+<div class="form-style">
+    <h3 class="titulo-pagina">Tipos de usuário no sistema</h3>
+    <div class="linha-horizontal"></div>
+    <form onsubmit="doInsertType(this); return false;">
+        <div class="div-flex">
+            <input type="text" id="Name" name="Name" style="width:96%;" class="input" placeholder="Digite o nome do tipo">
+            <button class="button-add" type="submit"><ion-icon name="add-outline"></ion-icon></button>
+        </div>
+    </form>
+    @if (Model.Types.Count == 0)
+    {
+        <div class="form-controle">
+            <div class="center" style="margin-top:8%;">
+                <lord-icon src="https://cdn.lordicon.com/wsdieofl.json"
+                           trigger="loop"
+                           state="loop-oscillate"
+                           colors="primary:#104891,secondary:#ebe6ef,tertiary:#104891,quaternary:#0a2e5c"
+                           style="width:250px;height:250px">
+                </lord-icon>
+            </div>
+            <div class="center">
+                <p>Não há registros para esse sistema, adicone algum ...</p>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="form-controle">
+            <div class="container-title">
+                <h4>Tipo de usuário</h4>
+                <h4>Nome do sistema</h4>
+                <h4>Dominio</h4>
+                <h4></h4>
+                <h4></h4>
+            </div>
+            <div class="tables" id="tables">
+                <ul class="table-nome" id="table-nome">
+                    @foreach (dynamic Type in Model.Types)
+                    {
+                        <li style="cursor: pointer; line-height: 50px;">@Type.Name</li>
+                    }
+                </ul>
+                <ul class="table-cpf">
+                    @foreach (dynamic Type in Model.Types)
+                    {
+                        <li style="cursor: pointer; line-height: 50px; width:150%;">@Type.System.Name</li>
+                    }
+                </ul>
+                <ul class="table-tipo">
+                    @foreach (dynamic Type in Model.Types)
+                    {
+                        <li style="line-height: 50px; cursor:pointer;">@Type.System.Domain</li>
+                    }
+                </ul>
+                <ul class="table-situacao">
+                    @foreach (dynamic Type in Model.Types)
+                    {
+                        <li style="line-height: 50px; color:aliceblue;">.</li>
+                    }
+                </ul>
+                <ul class="table-status">
+                    @foreach (dynamic Type in Model.Types)
+                    {
+                        <li style="line-height: 50px;">
+                            <button class="botao-table red" style="margin-right:10px;" onclick="doDelete(@Type.Id)">
+                                <lord-icon src="https://cdn.lordicon.com/skkahier.json"
+                                           trigger="hover"
+                                           style="width:25px;height:25px;"
+                                           colors="primary:#fff"
+                                           class="">
+                                </lord-icon>
+                            </button>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="modal-message">
+    <div class="modal-message-content">
+        <div class="modal-message-header" id="divMessage">
+        </div>
+        <div class="modal-conteudo">
+            <button class="botao-message" onclick="closeModalMessage(true);">Continuar</button>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function doInsertType(form) {
+            try {
+                var url = new URL(window.location.href);
+                var params = new URLSearchParams(url.search);
+                var id = params.get("id");
+
+                var u = parseForm(form);
+                u.SystemId = id;
+                $.ajax({
+                    type: 'POST',
+                    url: '/InsertType',
+                    data: JSON.stringify(u),
+                    success: function (data) {
+                        openModalMessage("Sistema Cadastrado!");
+                    },
+                    error: function () {
+                        openModalMessage("Não foi possível cadastrar o novo sistema!");
+                    },
+                    contentType: "application/json"
+                });
+            } catch (e) {
+                alert(e.message);
+            }
+        }
+
+        function doDelete(Id) {
+            try {
+                $.ajax({
+                    type: 'PUT',
+                    url: '/DeleteType/' + Id,
+                    success: function (data) {
+                        openModalMessage("Tipo excluido!");
+                    },
+                    error: function () {
+                        openModalMessage("Não foi possível excluir!");
+                    },
+                    contentType: "application/json"
+                });
+            } catch (e) {
+                alert(e.message);
+            }
+        }
+    </script>
+}

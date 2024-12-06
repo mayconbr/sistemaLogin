@@ -1,0 +1,119 @@
+﻿@model dynamic
+<div class="form-style">
+    <h3 class="titulo-pagina">Cadastro de Usuário</h3>
+    <div class="linha-horizontal"></div>
+    <form onsubmit="InsertUser(this); return false;">
+        <fieldset class="fildsetCadastro">
+            <div class="object-input">
+                <div>
+                    <label>Nome</label>
+                </div>
+                <div>
+                    <input type="text"
+                           name="Name"
+                           id="Name"
+                           placeholder="Ex.: Digite o nome do usuário"
+                           required />
+                </div>
+            </div>
+
+            <div class="object-input">
+                <div>
+                    <label>Email</label>
+                </div>
+                <div>
+                    <input type="email"
+                           name="Email"
+                           id="Email"
+                           placeholder="Ex.: nome@email.com.br"
+                           required />
+                </div>
+            </div>
+            <div class="object-input">
+                <div>
+                    <label>Sistema</label>
+                </div>
+                <div>
+                    <select class="filtro-tipos" title="SystemId" id="SystemId" name="SystemId" required>
+                        <option value="">Selecione o sistema</option>
+                        @foreach (dynamic Type in Model.Types)
+                        {
+                            <option value="@Type.System.Id">@Type.System.Name</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="object-input">
+                <div>
+                    <div>
+                        <label>Tipo de usuário</label>
+                    </div>
+                    <div>
+                        <select class="filtro-tipos" title="TypeId" id="TypeId" name="TypeId">
+                            <option value="0">Selecione o tipo de usuario</option>
+                            @foreach (dynamic Type in Model.Types)
+                            {
+                                <option value="@Type.Id">@Type.Name</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="object-input" style="margin-top:10px;">
+                <div>
+                    <div>
+                        <label>Informação Adicional do usuário</label>
+                    </div>
+                    <div>
+                        <select class="filtro-tipos" title="TypeId" id="TypeId" name="TypeId">
+                            <option value="0">Selecione a informação</option>
+                            @foreach (dynamic Sub in Model.SubCategories)
+                            {
+                                <option value="@Sub.Id">@Sub.Nome</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+        <div class="btn-cad">
+            <button class="btn-cadastrar" type="submit">Cadastrar</button>
+        </div>
+
+    </form>
+</div>
+
+<div class="modal-message" id="modalMessage">
+    <div class="modal-message-content">
+        <div class="modal-message-header" id="divMessage">
+        </div>
+        <div class="modal-conteudo">
+            <button class="botao-message" onclick="window.location.href = '/Usuario/TodosCadastros'">Continuar</button>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function InsertUser(form) {
+            try {
+                var u = parseForm(form);
+                $.ajax({
+                    type: 'POST',
+                    url: '/InsertUser',
+                    data: JSON.stringify(u),
+                    success: function (data) {
+                        openModalMessage("Usuário Cadastrado!");
+                    },
+                    error: function () {
+                        openModalMessage("Não foi possível se cadastrar no sistema com os dados informados!");
+                    },
+                    contentType: "application/json"
+                });
+            } catch (e) {
+                alert(e.message);
+            }
+        }
+    </script>
+}

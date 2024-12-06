@@ -1,0 +1,65 @@
+﻿<body class="estilo-body">
+    <div class="header">
+        <div class="logo no-select">           
+               
+            <a href="/Home/Index">
+                <img src="/img/logobranco.png" alt="">
+            </a>
+        </div>
+    </div>
+    <div class="login_body">
+        <div class="login_box" style="margin-top:6%;">
+            <h2 class="no-select" style="font-size:22px; margin-top:5%;">Recuperação de senha</h2>
+            <div class="linha"></div>
+            <p style="font-size:14px; font-family:Arial; margin-top:14px; color:#DBDBDB;">Para recuperar a sua senha, informe seu endereço de email que nós enviaremos um link para que você possa alterar.</p>
+            <form onsubmit="doEsqueceuSenha(this); return false;" style="margin-top:20px;" autocomplete="off">
+                <div class="input_box">
+                    <input type="email" placeholder="Email" name="Email" id="Email" required><ion-icon name="mail-outline" id="mail" style="float:right; margin-top:-37px;margin-right:10px; font-size:25px; color:#DBDBDB"></ion-icon>
+                </div>               
+                <div class="alert">
+                    <button type="submit">Enviar</button>
+                </div>
+            </form>
+        </div>
+    </div> 
+
+    <div class="message" id="message">
+
+    </div>
+    @section Scripts {
+        <script>
+            function doEsqueceuSenha(form) {
+                try {
+                    var u = parseForm(form);
+                    $.ajax({
+                        type: 'POST',
+                        url: '/EsqueceuSenha',
+                        data: JSON.stringify(u),
+                        success: function (data) {
+                            var mail = document.getElementById('mail');
+                            var input = document.getElementById('Email');
+                            input.style.border = '1px solid #71D41A';
+                            input.style.backgroundColor = '#e3f5d3';
+                            input.style.color = '#71D41A';
+                            mail.style.color = '#71D41A';
+                            sucessAtv("Email enviado!");
+                        },
+                        error: function () {
+                            var mail = document.getElementById('mail');
+                            var input = document.getElementById('Email');
+                            input.style.border = '1px solid #9D0903';
+                            input.style.backgroundColor = '#f5d3d5';
+                            mail.style.color = '#9D0903';
+                            ErrAtv("Email não encontrado!")
+                        },
+                        contentType: "application/json"
+                    });
+                } catch (e) {
+                    openModalMessage(e.message);
+                }
+            }
+                 
+        </script>
+    }
+
+</body>

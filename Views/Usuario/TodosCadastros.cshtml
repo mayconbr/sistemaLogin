@@ -1,0 +1,83 @@
+﻿@model dynamic
+
+<div class="form-style">
+    <h3 class="titulo-pagina">Todos os Usuários</h3>
+    <div class="linha-horizontal"></div>
+
+    <div class="form-controle">
+        <div class="container-title">
+            <h4>Nome</h4>
+            <h4>Sistema</h4>
+            <h4>Tipo</h4>
+            <h4>Status</h4>
+            <h4></h4>
+        </div>
+        @foreach (dynamic User in Model.Users)
+        {
+            <div class="tables" id="tables">
+                <ul class="table-nome" id="table-nome">
+                    <li>@User.Name</li>
+                </ul>
+                <ul class="table-cpf">
+                    <li>@User.System.Name</li>
+                </ul>
+                <ul class="table-tipo">
+                    <li>@User.Type.Name</li>
+                </ul>
+                <ul class="table-situacao">
+                    @if (User.Status == false)
+                    {
+                        <li>Desativado</li>
+                    }
+                    else
+                    {
+                        <li>Ativo</li>
+                    }
+                </ul>
+                <ul class="table-status">
+                    <li>
+                        <button class="botao-table red" onclick='DeleteUser(@User.Id)'>
+                            <lord-icon src="https://cdn.lordicon.com/skkahier.json"
+                                       trigger="hover"
+                                       style="width:25px;height:25px;"
+                                       colors="primary:#fff"
+                                       class="">
+                            </lord-icon>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        }
+    </div>
+</div>
+<div class="modal-message" id="modalMessage">
+    <div class="modal-message-content">
+        <div class="modal-message-header" id="divMessage">
+        </div>
+        <div class="modal-conteudo">
+            <button class="botao-message" onclick="location.reload();">Fechar</button>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function DeleteUser(Id) {
+            try {
+                $.ajax({
+                    type: 'PUT',
+                    url: '/DeleteUser/' + Id,
+                    success: function (data) {
+                        openModalMessage("Usuário Apagado!");
+                    },
+                    error: function () {
+                        openModalMessage("Não foi possível realizar a ação!");
+                    },
+                    contentType: "application/json"
+                });
+            } catch (e) {
+                alert(e.message);
+            }
+        }
+    </script>
+}
