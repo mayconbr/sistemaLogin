@@ -5,10 +5,9 @@ Este projeto foi desenvolvido com o objetivo de centralizar os sistemas de login
 ## Tecnologias Utilizadas
 
 - **ASP.NET MVC**: Framework principal utilizado para o desenvolvimento do sistema.
-- **HTML5**: Linguagem de marcação para estruturação do conteúdo da página.
-- **CSS3**: Utilizado para estilização e layout das páginas.
+- **HTML**: Linguagem de marcação para estruturação do conteúdo da página.
+- **CSS**: Utilizado para estilização e layout das páginas.
 - **Razor**: Engine de templates utilizada para gerar HTML dinâmico.
-- **API de Autenticação**: Centraliza e unifica o login dos sistemas da empresa.
 - **Claims-based Authentication**: Método de autenticação utilizado para identificar usuários através de *claims* (informações sobre o usuário), como nome, e-mail e permissões.
 
 ## Objetivo do Projeto
