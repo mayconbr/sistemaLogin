@@ -1,4 +1,4 @@
-# Centralização de Login - Projeto ASP.NET MVC
+#Projeto ASP.NET MVC
 
 Este projeto foi desenvolvido com o objetivo de centralizar os sistemas de login de uma empresa em uma única API, mantendo o visual da marca da empresa e simplificando o processo de autenticação para os usuários. Com essa solução, um único usuário pode acessar todos os sistemas da empresa de forma segura e integrada, sem a necessidade de realizar múltiplos logins.
 
